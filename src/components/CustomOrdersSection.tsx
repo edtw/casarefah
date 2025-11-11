@@ -18,21 +18,21 @@ const CustomOrdersSection = () => {
               Produtos sob demanda
             </span>
             <h2 className="font-cormorant text-4xl sm:text-5xl font-light text-foreground">
-              Personalize velas, difusores e objetos com a sua identidade visual
+              Personalize velas, difusores e objetos com a identidade visual da sua marca
             </h2>
             <p className="max-w-2xl text-sm sm:text-base text-muted-foreground">
               A CASA REFAH transforma a essência da sua marca em experiências
               olfativas exclusivas. Desenvolvemos blends autorais, pigmentações
               personalizadas e produção em pequena ou média escala com selo
-              artesanal. Ideal para eventos, giftings corporativos e vendas
+              artesanal. Ideal para eventos, presentes corporativos e vendas
               sob assinatura.
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
               {[
-                "Logos e identidades aplicadas em rótulos, tags e embalagens.",
-                "Fragrâncias exclusivas criadas a partir de briefing sensorial.",
-                "Peças em cimento nas suas paletas de cor e acabamentos.",
-                "Gestão completa: protótipo, produção, embalagem e envio.",
+                "Sua logo e identidades visual nos nossos produtos.",
+                "Fragrâncias exclusiva que combina com seu negócio.",
+                "Peças que seguem a paleta de cor e identidade da sua marca.",
+                "É a lembrancinha ideal para o seu evento.",
               ].map((item) => (
                 <div
                   key={item}
@@ -66,7 +66,7 @@ const CustomOrdersSection = () => {
                 className="h-full w-full object-cover"
               />
               <div className="absolute right-6 top-6 rounded-full bg-secondary px-4 py-2 text-xs font-semibold uppercase tracking-[0.4em] text-secondary-foreground">
-                Sua logo aqui
+                Personalize com sua logo
               </div>
             </div>
           </div>

@@ -18,40 +18,38 @@ const Navigation = () => {
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-      <div className="container mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14 sm:h-16 lg:h-20">
-          {/* Logo */}
-          <a
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate('/');
-            }}
-            className="font-cormorant text-xl sm:text-2xl lg:text-3xl font-semibold tracking-wide text-foreground hover:text-primary transition-colors"
-          >
-            CASA REFAH
-          </a>
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-background/40 shadow-lg shadow-black/5 backdrop-blur-xl">
+      <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6 lg:h-20 lg:px-8">
+        {/* Logo */}
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/');
+          }}
+          className="font-cormorant text-xl sm:text-2xl lg:text-3xl font-semibold tracking-wide text-foreground transition-colors hover:text-primary"
+        >
+          CASA REFAH
+        </a>
 
-          <Button
-            asChild
-            size="default"
-            className="h-9 sm:h-10 lg:h-11 bg-gradient-to-r from-emerald-500 via-emerald-500/90 to-teal-500 hover:from-emerald-500/90 hover:via-emerald-500 hover:to-teal-500 text-white shadow-medium hover:shadow-glow transition-all px-3 sm:px-4"
+        <Button
+          asChild
+          size="default"
+          className="h-9 shrink-0 rounded-full bg-gradient-to-r from-emerald-500 via-emerald-500/90 to-teal-500 px-3 text-xs text-white shadow-medium transition-all hover:from-emerald-500/90 hover:text-white hover:shadow-glow sm:h-10 sm:px-4 sm:text-sm lg:h-11"
+        >
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 sm:gap-2 lg:gap-3 font-medium"
           >
-            <a
-              href={whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 sm:gap-2 lg:gap-3 font-medium"
-            >
-              <span className="inline-flex h-7 w-7 sm:h-8 sm:w-8 lg:h-9 lg:w-9 items-center justify-center rounded-full bg-white/15">
-                <WhatsAppIcon />
-              </span>
-              <span className="text-xs sm:text-sm lg:text-base hidden xs:inline">Falar no WhatsApp</span>
-              <span className="text-xs sm:text-sm lg:text-base xs:hidden">WhatsApp</span>
-            </a>
-          </Button>
-        </div>
+            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 sm:h-8 sm:w-8 lg:h-9 lg:w-9">
+              <WhatsAppIcon />
+            </span>
+            <span className="hidden text-xs xs:inline sm:text-sm lg:text-base">Falar no WhatsApp</span>
+            <span className="text-xs xs:hidden sm:text-sm lg:text-base">WhatsApp</span>
+          </a>
+        </Button>
       </div>
     </nav>
   );

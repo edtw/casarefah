@@ -31,7 +31,7 @@ const Hero = () => {
   return (
     <section
       id="inicio"
-      className="relative min-h-[90vh] flex items-center justify-center overflow-hidden"
+      className="relative flex min-h-[90vh] items-center justify-center overflow-hidden pt-24 pb-16 sm:pt-28 sm:pb-20 lg:pt-32"
     >
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
@@ -51,7 +51,7 @@ const Hero = () => {
               Artesanatos e Velas Aromáticas
             </span>
 
-            <h1 className="font-cormorant text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white [text-shadow:_0_2px_10px_rgb(0_0_0_/_60%)] leading-tight">
+            <h1 className="font-montserrat text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white leading-tight tracking-tight [text-shadow:_0_2px_12px_rgb(0_0_0_/_60%)]">
               Casa Refah velas artesanais que unem estética, fragrância e serenidade.
             </h1>
 
@@ -65,7 +65,15 @@ const Hero = () => {
               <Button
                 size="lg"
                 className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground shadow-medium hover:shadow-glow transition-all duration-300 px-6 sm:px-8 text-sm sm:text-base"
-                onClick={() => navigate("/categoria/essenza")}
+                onClick={() => {
+                  const catalogSection = document.getElementById("catalogo");
+                  if (catalogSection) {
+                    catalogSection.scrollIntoView({ behavior: "smooth", block: "start" });
+                    window.history.replaceState(null, "", "#catalogo");
+                  } else {
+                    navigate("/categoria/essenza");
+                  }
+                }}
               >
                 Ver Produtos
               </Button>

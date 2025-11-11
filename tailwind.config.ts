@@ -16,6 +16,7 @@ export default {
       fontFamily: {
         'outfit': ['Outfit', 'sans-serif'],
         'cormorant': ['Cormorant', 'serif'],
+        'montserrat': ['Montserrat', 'sans-serif'],
         'sans': ['Outfit', 'sans-serif'],
         'serif': ['Cormorant', 'serif'],
       },

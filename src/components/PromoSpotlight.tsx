@@ -68,7 +68,7 @@ const PromoSpotlight = () => {
               Promoção relâmpago
             </span>
             <h2 className="font-cormorant text-4xl sm:text-5xl font-light text-foreground">
-              Mais Pedidas !
+              Promoção!
             </h2>
             <p className="max-w-xl text-sm sm:text-base text-muted-foreground">
               Garanta agora os best-sellers da CASA REFAH com preços especiais

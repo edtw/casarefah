@@ -32,16 +32,16 @@ const EssenzaCTA = () => {
             </p>
             <ul className="grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
               <li className="rounded-2xl border border-primary/20 bg-white/70 px-4 py-3">
-                Assinamos etiquetas e tags com a sua logo.
+                Personalize seu kit a sua maneira.
               </li>
               <li className="rounded-2xl border border-primary/20 bg-white/70 px-4 py-3">
-                Seleção de aromas autorais com briefing sensorial.
+                Selecione as melhores peças para você.
               </li>
               <li className="rounded-2xl border border-primary/20 bg-white/70 px-4 py-3">
-                Kits a partir de 12 unidades com embalagem premium.
+                Kits a partir de 4 unidades.
               </li>
               <li className="rounded-2xl border border-primary/20 bg-white/70 px-4 py-3">
-                Envio para todo o Brasil com acompanhamento dedicado.
+                Envio para todo o Brasil.
               </li>
             </ul>
             <Button

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { KeyboardEvent, MouseEvent, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Tabs,
@@ -7,9 +7,11 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/CartContext";
 import { products, getFeaturedProducts } from "@/data/products";
+import { useToast } from "@/hooks/use-toast";
 import { Product } from "@/types/product";
-import { ArrowUpRight, ChevronRight } from "lucide-react";
+import { ArrowUpRight, ChevronRight, ShoppingCart } from "lucide-react";
 
 const whatsappNumber = "5511984336900";
 
@@ -22,21 +24,73 @@ const buildWhatsAppLink = (product: Product) => {
 
 const ProductShowcaseTabs = () => {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<"destaques" | "catalogo">(
     "destaques"
   );
+  const openProductDetails = (product: Product) => {
+    navigate(`/produto/${product.slug}`);
+  };
+  const handleAddToCart = (
+    product: Product,
+    event?: MouseEvent<HTMLButtonElement>
+  ) => {
+    event?.stopPropagation();
+    if (!product.inStock) return;
+    addToCart(product);
+    toast({
+      title: "Adicionado ao carrinho",
+      description: `${product.name} foi adicionado ao seu carrinho.`,
+    });
+  };
+  const handleCardKeyDown = (
+    event: KeyboardEvent<HTMLDivElement>,
+    product: Product
+  ) => {
+    if (event.key === "Enter" || event.key === " " || event.key === "Spacebar") {
+      event.preventDefault();
+      openProductDetails(product);
+    }
+  };
+  const syncHashWithTab = (tab: "destaques" | "catalogo") => {
+    if (typeof window === "undefined") return;
+    const hash = `#${tab}`;
+    if (window.location.hash !== hash) {
+      window.history.replaceState(null, "", hash);
+    }
+  };
 
   const featuredProducts = useMemo(() => getFeaturedProducts(), []);
   const catalogProducts = useMemo(() => products, []);
 
-  const handleOpenCatalog = () => setActiveTab("catalogo");
+  const handleOpenCatalog = () => {
+    setActiveTab("catalogo");
+    syncHashWithTab("catalogo");
+  };
 
   const handleContactProduct = (product: Product) => {
     window.open(buildWhatsAppLink(product), "_blank", "noopener,noreferrer");
   };
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (hash === "catalogo") {
+        setActiveTab("catalogo");
+      } else if (hash === "destaques") {
+        setActiveTab("destaques");
+      }
+    };
+
+    handleHashChange();
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
   return (
-    <section className="bg-background py-16 sm:py-24">
+    <section id="catalogo" className="bg-background py-16 sm:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-4 text-left sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -65,11 +119,15 @@ const ProductShowcaseTabs = () => {
 
         <Tabs
           value={activeTab}
-          onValueChange={(value) => setActiveTab(value as "destaques" | "catalogo")}
+          onValueChange={(value) => {
+            const tab = value as "destaques" | "catalogo";
+            setActiveTab(tab);
+            syncHashWithTab(tab);
+          }}
           className="mt-10"
         >
           <TabsList className="grid w-full grid-cols-2 sm:w-auto sm:min-w-[400px]">
-            <TabsTrigger value="destaques">Seleção Essencial</TabsTrigger>
+            <TabsTrigger value="destaques">Mais pedidos</TabsTrigger>
             <TabsTrigger value="catalogo">Catálogo Completo</TabsTrigger>
           </TabsList>
 
@@ -78,7 +136,11 @@ const ProductShowcaseTabs = () => {
               {featuredProducts.map((product, index) => (
                 <div
                   key={product.id}
-                  className="flex h-full flex-col rounded-3xl border border-border/60 bg-card shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => openProductDetails(product)}
+                  onKeyDown={(event) => handleCardKeyDown(event, product)}
+                  className="group flex h-full cursor-pointer flex-col rounded-3xl border border-border/60 bg-card shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="relative aspect-[4/3] overflow-hidden rounded-t-3xl">
@@ -113,16 +175,38 @@ const ProductShowcaseTabs = () => {
                       </span>
                     </div>
                     <div className="mt-auto flex flex-col gap-2">
-                      <Button onClick={() => navigate(`/produto/${product.slug}`)}>
-                        Ver detalhes
-                      </Button>
                       <Button
-                        variant="outline"
-                        className="border-primary/40 text-primary hover:bg-primary/5"
-                        onClick={() => handleContactProduct(product)}
+                        size="lg"
+                        className="flex items-center justify-center gap-2"
+                        onClick={(event) => handleAddToCart(product, event)}
+                        disabled={!product.inStock}
                       >
-                        Consultar via WhatsApp
+                        <ShoppingCart className="h-5 w-5" />
+                        Adicionar ao carrinho
                       </Button>
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        <Button
+                          variant="outline"
+                          className="border-primary/40 text-primary hover:bg-primary/5"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            openProductDetails(product);
+                          }}
+                        >
+                          Ver detalhes
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className="justify-center text-primary hover:text-primary/80"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleContactProduct(product);
+                          }}
+                        >
+                          Conversar no WhatsApp
+                          <ArrowUpRight className="ml-1 h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -143,35 +227,89 @@ const ProductShowcaseTabs = () => {
           <TabsContent value="catalogo" className="mt-10 focus-visible:outline-none">
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {catalogProducts.map((product) => (
-                <button
+                <div
                   key={product.id}
-                  onClick={() => handleContactProduct(product)}
-                  className="group flex h-full flex-col rounded-3xl border border-border/60 bg-card p-6 text-left shadow-md transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => openProductDetails(product)}
+                  onKeyDown={(event) => handleCardKeyDown(event, product)}
+                  className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl border border-border/60 bg-card text-left shadow-md transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl"
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="text-lg font-semibold text-foreground group-hover:text-primary">
-                        {product.name}
-                      </h3>
-                      <span className="mt-1 inline-block rounded-full bg-secondary/40 px-3 py-1 text-xs font-medium uppercase tracking-[0.3em] text-secondary-foreground/80">
-                        {product.category === "decor" ? "Home Decor" : product.category}
+                  <div className="relative aspect-[4/3] w-full overflow-hidden">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    {product.originalPrice && (
+                      <span className="absolute right-4 top-4 rounded-full bg-primary px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-primary-foreground">
+                        Promoção
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex flex-1 flex-col p-6">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground group-hover:text-primary">
+                          {product.name}
+                        </h3>
+                        <span className="mt-1 inline-block rounded-full bg-secondary/40 px-3 py-1 text-xs font-medium uppercase tracking-[0.3em] text-secondary-foreground/80">
+                          {product.category === "decor" ? "Home Decor" : product.category}
+                        </span>
+                      </div>
+                      <ArrowUpRight className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-primary" />
+                    </div>
+                    <p className="mt-4 text-sm text-muted-foreground line-clamp-3">
+                      {product.description}
+                    </p>
+                    <div className="mt-6 flex flex-col gap-2 text-sm">
+                      {product.originalPrice && (
+                        <span className="text-muted-foreground line-through">
+                          R$ {product.originalPrice.toFixed(2).replace(".", ",")}
+                        </span>
+                      )}
+                      <span className="font-semibold text-primary">
+                        R$ {product.price.toFixed(2).replace(".", ",")}
                       </span>
                     </div>
-                    <ArrowUpRight className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-primary" />
+                    <div className="mt-6 flex flex-col gap-2">
+                      <Button
+                        size="sm"
+                        className="flex items-center justify-center gap-2"
+                        onClick={(event) => handleAddToCart(product, event)}
+                        disabled={!product.inStock}
+                      >
+                        <ShoppingCart className="h-4 w-4" />
+                        Adicionar ao carrinho
+                      </Button>
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="border-primary/40 text-primary hover:bg-primary/5"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            openProductDetails(product);
+                          }}
+                        >
+                          Ver detalhes
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="justify-center text-primary hover:text-primary/80"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleContactProduct(product);
+                          }}
+                        >
+                          Conversar no WhatsApp
+                          <ArrowUpRight className="ml-1 h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                  <p className="mt-4 text-sm text-muted-foreground line-clamp-3">
-                    {product.description}
-                  </p>
-                  <div className="mt-6 flex flex-col gap-2 text-sm">
-                    <span className="font-semibold text-primary">
-                      R$ {product.price.toFixed(2).replace(".", ",")}
-                    </span>
-                  </div>
-                  <span className="mt-6 inline-flex w-fit items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                    Conversar no WhatsApp
-                    <ArrowUpRight className="h-4 w-4" />
-                  </span>
-                </button>
+                </div>
               ))}
             </div>
           </TabsContent>
