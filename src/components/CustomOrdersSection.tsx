@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import customImage from "@/assets/Florescer da Cerejeira.png";
+import customImage from "@/assets/florescer-da-cerejeira.png";
 import { Stamp } from "lucide-react";
 
 const CustomOrdersSection = () => {

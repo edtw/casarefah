@@ -1,16 +1,16 @@
 import { Product } from "@/types/product";
-import florescerDaCerejeiraImage from "@/assets/Florescer da Cerejeira.png";
-import encantoDaPeoniaImage from "@/assets/Encanto da Peônia.png";
-import difusorBloomImage from "@/assets/Difusor Bloom.png";
-import bellaRoseImage from "@/assets/Bella Rose.png";
-import triadeRefahImage from "@/assets/Tríade Refah.png";
-import difusoraRefahImage from "@/assets/Difusora Refah.png";
-import conjuntoSolarisImage from "@/assets/Conjunto solaris.png";
-import eternoBouquetImage from "@/assets/Eterno Bouquet.png";
-import discoNiemeyerImage from "@/assets/Disco Niemeyer.png";
-import gotaDecorImage from "@/assets/Gota Decor.png";
-import luniaImage from "@/assets/Lunia.png";
-import serenitaImage from "@/assets/Serenita.png";
+import florescerDaCerejeiraImage from "@/assets/florescer-da-cerejeira.png";
+import encantoDaPeoniaImage from "@/assets/encanto-da-peonia.png";
+import difusorBloomImage from "@/assets/difusor-bloom.png";
+import bellaRoseImage from "@/assets/bella-rose.png";
+import triadeRefahImage from "@/assets/triade-refah.png";
+import difusoraRefahImage from "@/assets/difusora-refah.png";
+import conjuntoSolarisImage from "@/assets/conjunto-solaris.png";
+import eternoBouquetImage from "@/assets/eterno-bouquet.png";
+import discoNiemeyerImage from "@/assets/disco-niemeyer.png";
+import gotaDecorImage from "@/assets/gota-decor.png";
+import luniaImage from "@/assets/lunia.png";
+import serenitaImage from "@/assets/serenita.png";
 
 export const products: Product[] = [
   {
@@ -118,7 +118,7 @@ export const products: Product[] = [
     category: "decor",
     inStock: true,
   },
-  {``
+  {
     id: "10",
     name: "Gota Decor",
     slug: "gota-decor",
